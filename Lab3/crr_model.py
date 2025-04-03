@@ -15,7 +15,6 @@ class AmericanCall(Instrument):
         self.K = K
     def price(self, trajectory):
         call_trajectory = np.array(trajectory) - self.K
-        call_trajectory = call_trajectory[1:]
         call_trajectory[call_trajectory < 0] = 0
         return np.max(call_trajectory)
 
@@ -75,7 +74,7 @@ def main():
     pstar = (1 + r - d) / (u - d)
     model = CRRModel(u, d, r, T, S0)
     strike = 150
-    instrument = EuropeanCall(strike)
+    instrument = AmericanCall(strike)
     print(model.price_instrument(instrument))
     print((1+r)**(-T) * sum([math.comb(T,i) * (pstar**i) * ((1-pstar)**(T-i)) * max((S0 * (u**i) * (d**(T-i))) - strike,0) for i in range(T+1)]))
 if __name__ == '__main__':
